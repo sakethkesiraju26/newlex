@@ -240,6 +240,50 @@
             color: var(--orange);
         }
 
+        .fraud-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            background: var(--purple);
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--purple);
+            margin-left: 0.5rem;
+            text-transform: capitalize;
+        }
+
+        .synopsis-box {
+            background: var(--bg-detail);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .synopsis-box h4 {
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .synopsis-box p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .profit-line, .charges-line {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .profit-line strong {
+            color: var(--accent);
+        }
+
         .accuracy-cell {
             font-size: 0.9rem;
             font-weight: 600;
@@ -446,374 +490,523 @@
     <script>
         const resultsData = {
             "model_name": "OpenAI/gpt-4o",
-            "score": {
-                "overall_score": 74.44,
-                "individual_scores": {
-                    "resolution_type": 100.0,
-                    "disgorgement": 66.67,
-                    "penalty": 0.0,
-                    "prejudgment_interest": 0.0,
-                    "has_injunction": 100.0,
-                    "has_officer_director_bar": 87.5,
-                    "has_conduct_restriction": 62.5
-                }
+            "model_config": {
+                        "provider": "openai",
+                        "model": "gpt-4o",
+                        "temperature": 0.0,
+                        "max_tokens": 2000
             },
-            "duration_seconds": 145.77,
+            "score": {
+                        "model_name": "OpenAI/gpt-4o",
+                        "overall_score": 74.44,
+                        "individual_scores": {
+                                    "resolution_type": 100.0,
+                                    "disgorgement": 66.67,
+                                    "penalty": 0.0,
+                                    "prejudgment_interest": 0.0,
+                                    "monetary_average": 22.22,
+                                    "has_injunction": 100.0,
+                                    "has_officer_director_bar": 87.5,
+                                    "has_conduct_restriction": 62.5
+                        },
+                        "scorable_counts": {
+                                    "total_cases": 8,
+                                    "resolution_type": 8,
+                                    "disgorgement": 3,
+                                    "penalty": 5,
+                                    "interest": 3
+                        }
+            },
+            "timestamp": "2026-01-01T13:52:45.948826",
+            "duration_seconds": 145.76677012443542,
             "predictions": [
-                {
-                    "case_id": "LR-26445",
-                    "success": true,
-                    "metadata": {
-                        "release_date": "2025-12-16",
-                        "title": "Artur Khachatryan",
-                        "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26445.pdf",
-                        "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26445",
-                        "charges": "fraud, Section 17(a), Section 10(b), Section 9(a)"
-                    },
-                    "predicted": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 373885,
-                        "penalty_amount": 150000,
-                        "prejudgment_interest": 20000,
-                        "has_injunction": true,
-                        "has_officer_director_bar": false,
-                        "has_conduct_restriction": true,
-                        "reasoning": {
-                            "resolution_type": "Given the detailed evidence of wrongdoing, the defendant will likely settle.",
-                            "monetary": "SEC will seek full disgorgement of $373,885 plus prejudgment interest and civil penalty.",
-                            "remedial_measures": "Injunction and conduct restriction likely. Officer/director bar unlikely."
+                        {
+                                    "case_id": "LR-26445",
+                                    "success": true,
+                                    "predicted": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 373885,
+                                                "penalty_amount": 150000,
+                                                "prejudgment_interest": 20000,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": true,
+                                                "reasoning": {
+                                                            "resolution_type": "Given the detailed evidence of wrongdoing and the pattern of behavior, it is likely that the defendant will opt to settle to avoid the uncertainties and costs of litigation.",
+                                                            "monetary": "The SEC is likely to seek full disgorgement of the ill-gotten gains ($373,885) plus prejudgment interest. A civil penalty is also likely, given the egregious nature of the violations, but it may be negotiated to a lower amount than the maximum possible.",
+                                                            "remedial_measures": "An injunction is standard in SEC settlements to prevent future violations. A conduct-based restriction, such as a trading ban, is likely given the nature of the violations. However, an officer/director bar is unlikely as the defendant is not alleged to have been in such a position."
+                                                }
+                                    },
+                                    "ground_truth": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 373885.0,
+                                                "penalty_amount": 112165.0,
+                                                "prejudgment_interest": 22629.34,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": true
+                                    },
+                                    "raw_response": "```json\n{\n  \"resolution_type\": \"settled\",\n  \"disgorgement_amount\": 373885,\n  \"penalty_amount\": 150000,\n  \"prejudgment_interest\": 20000,\n  \"has_injunction\": true,\n  \"has_officer_director_bar\": false,\n  \"has_conduct_restriction\": true,\n  \"reasoning\": {\n    \"resolution_type\": \"Given the detailed evidence of wrongdoing and the pattern of behavior, it is likely that the defendant will opt to settle to avoid the uncertainties and costs of litigation.\",\n    \"monetary\": \"The SEC is likely to seek full disgorgement of the ill-gotten gains ($373,885) plus prejudgment interest. A civil penalty is also likely, given the egregious nature of the violations, but it may be negotiated to a lower amount than the maximum possible.\",\n    \"remedial_measures\": \"An injunction is standard in SEC settlements to prevent future violations. A conduct-based restriction, such as a trading ban, is likely given the nature of the violations. However, an officer/director bar is unlikely as the defendant is not alleged to have been in such a position.\"\n  }\n}\n```",
+                                    "comparison": {
+                                                "resolution_type_correct": true,
+                                                "disgorgement_correct": true,
+                                                "penalty_correct": false,
+                                                "interest_correct": false,
+                                                "injunction_correct": true,
+                                                "officer_bar_correct": true,
+                                                "conduct_restriction_correct": true,
+                                                "errors": [
+                                                            "Penalty: predicted $150000.0, actual $112165.0",
+                                                            "Interest: predicted $20000.0, actual $22629.34"
+                                                ]
+                                    },
+                                    "metadata": {
+                                                "title": "Artur Khachatryan",
+                                                "release_date": "2025-12-16",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26445.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26445",
+                                                "charges": "fraud, Section 17(a), Section 10(b), Section 9(a), violating",
+                                                "court": "United States District Court for the Central District of California",
+                                                "respondents": "provisions and ordering him to pay disgorgement of $373,885 plus prejudgment interest of $22,629",
+                                                "reducto_extraction": {
+                                                            "case_id": "LR-26445",
+                                                            "success": true,
+                                                            "data": {
+                                                                        "case_synopsis": "The SEC has filed a complaint against Artur Khachatryan, accusing him of engaging in a manipulative stock trading scheme known as spoofing between January 2022 and January 2024. Khachatryan allegedly placed non-bona fide orders to manipulate stock prices and executed bona fide orders at the manipulated prices for profit. He conducted this scheme in his own accounts and those of friends and relatives, generating approximately $373,885 in ill-gotten gains. The scheme primarily took place outside regular market hours, exploiting thinly traded securities to artificially move prices. Khachatryan also opened accounts in the names of others to continue trading after his accounts were restricted or closed by broker-dealers. The SEC claims that Khachatryan was aware of the illegality of his actions, as evidenced by his communications with broker-dealers acknowledging the manipulative nature of his trading practices.\n\nThe SEC is seeking a permanent injunction against Khachatryan, disgorgement of his ill-gotten gains with prejudgment interest, and a civil penalty. Additionally, the SEC requests a conduct-based injunction prohibiting Khachatryan from opening or trading in brokerage accounts in his name or the names of others without notifying the broker-dealer of the judgment against him.",
+                                                                        "defendant_names": "Artur Khachatryan",
+                                                                        "defendant_type": "individual",
+                                                                        "is_repeat_offender": false,
+                                                                        "charges": "Section 10(b) of the Exchange Act; Rule 10b-5(a) and (c); Rule 10b-5(b); Section 9(a)(2) of the Exchange Act; Sections 17(a)(1) and 17(a)(3) of the Securities Act; Section 17(a)(2) of the Securities Act",
+                                                                        "fraud_type": "market_manipulation",
+                                                                        "scheme_summary": "Artur Khachatryan engaged in a spoofing scheme to manipulate stock prices and profit from the resulting artificial price movements.",
+                                                                        "victim_count": null,
+                                                                        "amount_raised": null,
+                                                                        "defendant_profit": 373885,
+                                                                        "violation_start_date": "2022-01-01",
+                                                                        "violation_end_date": "2024-01-31",
+                                                                        "seeks_disgorgement": true,
+                                                                        "seeks_penalty": true,
+                                                                        "seeks_injunction": true,
+                                                                        "seeks_officer_bar": false,
+                                                                        "seeks_penny_stock_bar": false,
+                                                                        "seeks_industry_bar": false,
+                                                                        "other_relief": "prohibition from opening or trading in brokerage accounts without notifying broker-dealer of judgment",
+                                                                        "court": "United States District Court Central District of California",
+                                                                        "filing_date": "2025-12-16"
+                                                            },
+                                                            "usage": {
+                                                                        "num_pages": 17,
+                                                                        "num_fields": 21,
+                                                                        "credits": 68
+                                                            },
+                                                            "job_id": "ef66a812-b5fd-4707-b49f-e472c7ebcf5c"
+                                                },
+                                                "case_synopsis": "The SEC has filed a complaint against Artur Khachatryan, accusing him of engaging in a manipulative stock trading scheme known as spoofing between January 2022 and January 2024. Khachatryan allegedly placed non-bona fide orders to manipulate stock prices and executed bona fide orders at the manipulated prices for profit. He conducted this scheme in his own accounts and those of friends and relatives, generating approximately $373,885 in ill-gotten gains. The scheme primarily took place outside regular market hours, exploiting thinly traded securities to artificially move prices. Khachatryan also opened accounts in the names of others to continue trading after his accounts were restricted or closed by broker-dealers. The SEC claims that Khachatryan was aware of the illegality of his actions, as evidenced by his communications with broker-dealers acknowledging the manipulative nature of his trading practices.\n\nThe SEC is seeking a permanent injunction against Khachatryan, disgorgement of his ill-gotten gains with prejudgment interest, and a civil penalty. Additionally, the SEC requests a conduct-based injunction prohibiting Khachatryan from opening or trading in brokerage accounts in his name or the names of others without notifying the broker-dealer of the judgment against him.",
+                                                "scheme_summary": "Artur Khachatryan engaged in a spoofing scheme to manipulate stock prices and profit from the resulting artificial price movements.",
+                                                "fraud_type": "market_manipulation",
+                                                "defendant_names": "Artur Khachatryan",
+                                                "defendant_profit": 373885,
+                                                "extracted_charges": "Section 10(b) of the Exchange Act; Rule 10b-5(a) and (c); Rule 10b-5(b); Section 9(a)(2) of the Exchange Act; Sections 17(a)(1) and 17(a)(3) of the Securities Act; Section 17(a)(2) of the Securities Act"
+                                    }
+                        },
+                        {
+                                    "case_id": "LR-26444",
+                                    "success": true,
+                                    "predicted": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 852000,
+                                                "penalty_amount": 200000,
+                                                "prejudgment_interest": 50000,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": true,
+                                                "has_conduct_restriction": true,
+                                                "reasoning": {
+                                                            "resolution_type": "Given the strong evidence of fraud and the defendant's prior involvement in a Ponzi scheme, it is likely that the defendant will opt to settle to avoid the uncertainties and potential harsher penalties of a trial.",
+                                                            "monetary": "The SEC will likely seek disgorgement of the full amount raised from investors ($852,000) as ill-gotten gains. A civil penalty is also probable given the egregious nature of the fraud, and prejudgment interest will likely be applied to the disgorgement amount.",
+                                                            "remedial_measures": "The SEC will likely seek an injunction to prevent future violations, given the defendant's history of fraudulent activity. An officer and director bar is probable due to the severity of the misconduct, and conduct-based restrictions are likely to prevent the defendant from engaging in similar activities in the future."
+                                                }
+                                    },
+                                    "ground_truth": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": null,
+                                                "penalty_amount": 85000.0,
+                                                "prejudgment_interest": null,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": false
+                                    },
+                                    "raw_response": "```json\n{\n  \"resolution_type\": \"settled\",\n  \"disgorgement_amount\": 852000,\n  \"penalty_amount\": 200000,\n  \"prejudgment_interest\": 50000,\n  \"has_injunction\": true,\n  \"has_officer_director_bar\": true,\n  \"has_conduct_restriction\": true,\n  \"reasoning\": {\n    \"resolution_type\": \"Given the strong evidence of fraud and the defendant's prior involvement in a Ponzi scheme, it is likely that the defendant will opt to settle to avoid the uncertainties and potential harsher penalties of a trial.\",\n    \"monetary\": \"The SEC will likely seek disgorgement of the full amount raised from investors ($852,000) as ill-gotten gains. A civil penalty is also probable given the egregious nature of the fraud, and prejudgment interest will likely be applied to the disgorgement amount.\",\n    \"remedial_measures\": \"The SEC will likely seek an injunction to prevent future violations, given the defendant's history of fraudulent activity. An officer and director bar is probable due to the severity of the misconduct, and conduct-based restrictions are likely to prevent the defendant from engaging in similar activities in the future.\"\n  }\n}\n```",
+                                    "comparison": {
+                                                "resolution_type_correct": true,
+                                                "disgorgement_correct": null,
+                                                "penalty_correct": false,
+                                                "interest_correct": null,
+                                                "injunction_correct": true,
+                                                "officer_bar_correct": false,
+                                                "conduct_restriction_correct": false,
+                                                "errors": [
+                                                            "Penalty: predicted $200000.0, actual $85000.0",
+                                                            "Officer bar: predicted True, actual False",
+                                                            "Conduct restriction: predicted True, actual False"
+                                                ]
+                                    },
+                                    "metadata": {
+                                                "title": "James O Ward, Jr.",
+                                                "release_date": "2025-12-16",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2024/comp26102.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26444",
+                                                "charges": "Fraud, Section 17(a), Section 10(b), violating",
+                                                "court": null,
+                                                "respondents": "James O"
+                                    }
+                        },
+                        {
+                                    "case_id": "LR-26443",
+                                    "success": true,
+                                    "predicted": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 385220,
+                                                "penalty_amount": 100000,
+                                                "prejudgment_interest": 20000,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": true,
+                                                "reasoning": {
+                                                            "resolution_type": "Given the clear evidence of fraud and the typical SEC approach in such cases, it is likely that the defendant will settle to avoid the costs and risks of litigation.",
+                                                            "monetary": "The disgorgement amount is likely to be the total benefit received by the defendant, which is $385,220. A civil penalty is also likely, given the fraudulent nature of the conduct, and is estimated at $100,000. Prejudgment interest is typically awarded to compensate for the time value of the ill-gotten gains, estimated here at $20,000.",
+                                                            "remedial_measures": "An injunction is standard in SEC fraud cases to prevent future violations. A conduct restriction, such as a ban on participating in the issuance, purchase, offer, or sale of any security, is likely given the fraudulent conduct. An officer/director bar is less likely as the defendant was not in a public company role."
+                                                }
+                                    },
+                                    "ground_truth": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 385220.0,
+                                                "penalty_amount": 70000.0,
+                                                "prejudgment_interest": 70640.0,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": true
+                                    },
+                                    "raw_response": "```json\n{\n  \"resolution_type\": \"settled\",\n  \"disgorgement_amount\": 385220,\n  \"penalty_amount\": 100000,\n  \"prejudgment_interest\": 20000,\n  \"has_injunction\": true,\n  \"has_officer_director_bar\": false,\n  \"has_conduct_restriction\": true,\n  \"reasoning\": {\n    \"resolution_type\": \"Given the clear evidence of fraud and the typical SEC approach in such cases, it is likely that the defendant will settle to avoid the costs and risks of litigation.\",\n    \"monetary\": \"The disgorgement amount is likely to be the total benefit received by the defendant, which is $385,220. A civil penalty is also likely, given the fraudulent nature of the conduct, and is estimated at $100,000. Prejudgment interest is typically awarded to compensate for the time value of the ill-gotten gains, estimated here at $20,000.\",\n    \"remedial_measures\": \"An injunction is standard in SEC fraud cases to prevent future violations. A conduct restriction, such as a ban on participating in the issuance, purchase, offer, or sale of any security, is likely given the fraudulent conduct. An officer/director bar is less likely as the defendant was not in a public company role.\"\n  }\n}\n```",
+                                    "comparison": {
+                                                "resolution_type_correct": true,
+                                                "disgorgement_correct": true,
+                                                "penalty_correct": false,
+                                                "interest_correct": false,
+                                                "injunction_correct": true,
+                                                "officer_bar_correct": true,
+                                                "conduct_restriction_correct": true,
+                                                "errors": [
+                                                            "Penalty: predicted $100000.0, actual $70000.0",
+                                                            "Interest: predicted $20000.0, actual $70640.0"
+                                                ]
+                                    },
+                                    "metadata": {
+                                                "title": "Irfan Mohammed",
+                                                "release_date": "2025-12-15",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26443.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26443",
+                                                "charges": "Fraud, fraud, Section 17(a), Section 10(b), violating",
+                                                "court": "U.S. District Court for the Central District of Illinois",
+                                                "respondents": "Irfan Mohammed for Alleged Offering FraudOn December 12, 2025, the Securities and Exchange Commission filed a settled action against Peoria, Illinois resident Irfan Mohammed, alleging that he engaged in a fraudulent scheme through which he obtained approximately $585,000 from members of the Islamic community in Central Illinois"
+                                    }
+                        },
+                        {
+                                    "case_id": "LR-26442",
+                                    "success": true,
+                                    "predicted": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 816934,
+                                                "penalty_amount": 500000,
+                                                "prejudgment_interest": 50000,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": true,
+                                                "reasoning": {
+                                                            "resolution_type": "Given the history of similar cases and the fact that Ortiz has previously settled with the SEC in a similar matter, it is likely that this case will be settled rather than litigated.",
+                                                            "monetary": "The disgorgement amount is likely to be the full amount of transaction-based compensation received, which is $816,934. A civil penalty is also likely, given the repeated nature of the violations, estimated at $500,000. Prejudgment interest is typically added to disgorgement, estimated here at $50,000.",
+                                                            "remedial_measures": "An injunction is likely given the SEC's request for permanent enjoinment from future violations. A conduct-based restriction, such as a bar from participating in the issuance, purchase, offer, or sale of any security, is also likely. However, an officer/director bar is unlikely as the complaint does not specifically request it and Ortiz's role does not suggest he was in a position to serve as an officer or director of a public company."
+                                                }
+                                    },
+                                    "ground_truth": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": null,
+                                                "penalty_amount": null,
+                                                "prejudgment_interest": null,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": false
+                                    },
+                                    "raw_response": "```json\n{\n  \"resolution_type\": \"settled\",\n  \"disgorgement_amount\": 816934,\n  \"penalty_amount\": 500000,\n  \"prejudgment_interest\": 50000,\n  \"has_injunction\": true,\n  \"has_officer_director_bar\": false,\n  \"has_conduct_restriction\": true,\n  \"reasoning\": {\n    \"resolution_type\": \"Given the history of similar cases and the fact that Ortiz has previously settled with the SEC in a similar matter, it is likely that this case will be settled rather than litigated.\",\n    \"monetary\": \"The disgorgement amount is likely to be the full amount of transaction-based compensation received, which is $816,934. A civil penalty is also likely, given the repeated nature of the violations, estimated at $500,000. Prejudgment interest is typically added to disgorgement, estimated here at $50,000.\",\n    \"remedial_measures\": \"An injunction is likely given the SEC's request for permanent enjoinment from future violations. A conduct-based restriction, such as a bar from participating in the issuance, purchase, offer, or sale of any security, is also likely. However, an officer/director bar is unlikely as the complaint does not specifically request it and Ortiz's role does not suggest he was in a position to serve as an officer or director of a public company.\"\n  }\n}\n```",
+                                    "comparison": {
+                                                "resolution_type_correct": true,
+                                                "disgorgement_correct": null,
+                                                "penalty_correct": null,
+                                                "interest_correct": null,
+                                                "injunction_correct": true,
+                                                "officer_bar_correct": true,
+                                                "conduct_restriction_correct": false,
+                                                "errors": [
+                                                            "Conduct restriction: predicted True, actual False"
+                                                ]
+                                    },
+                                    "metadata": {
+                                                "title": "Charles D. Oliver; David P. Ortiz; DaveGlo Investment Group, Inc.; Kevin N. Richards",
+                                                "release_date": "2025-12-15",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26442-dortiz.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26442",
+                                                "charges": "Section 15(a), violating",
+                                                "court": "United States District Court for the Middle District of Florida. The SEC\u2019s complaint against Ortiz and DaveGlo and its complaint against Richards were filed in the United States District Court for the Central District of California. The companies that sponsored the unregistered offerings of oil and gas securities",
+                                                "respondents": "Florida-based Charles D"
+                                    }
+                        },
+                        {
+                                    "case_id": "LR-26441",
+                                    "success": true,
+                                    "predicted": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 2800000,
+                                                "penalty_amount": 500000,
+                                                "prejudgment_interest": 100000,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": true,
+                                                "has_conduct_restriction": true,
+                                                "reasoning": {
+                                                            "resolution_type": "Given the detailed allegations and the clear evidence of fraud, it is likely that the defendants will opt to settle to avoid the uncertainties and costs of litigation.",
+                                                            "monetary": "The SEC typically seeks disgorgement of the full amount raised through fraudulent means, which is $2.8 million in this case. A civil penalty is also likely, given the egregious nature of the fraud, and prejudgment interest is commonly applied to disgorgement amounts.",
+                                                            "remedial_measures": "The SEC is likely to obtain an injunction to prevent future violations, and given the severity of the misconduct, an officer and director bar is probable. Conduct-based restrictions are also likely to prevent Kelly from engaging in similar activities in the future."
+                                                }
+                                    },
+                                    "ground_truth": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": null,
+                                                "penalty_amount": 125000.0,
+                                                "prejudgment_interest": null,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": true,
+                                                "has_conduct_restriction": true
+                                    },
+                                    "raw_response": "```json\n{\n  \"resolution_type\": \"settled\",\n  \"disgorgement_amount\": 2800000,\n  \"penalty_amount\": 500000,\n  \"prejudgment_interest\": 100000,\n  \"has_injunction\": true,\n  \"has_officer_director_bar\": true,\n  \"has_conduct_restriction\": true,\n  \"reasoning\": {\n    \"resolution_type\": \"Given the detailed allegations and the clear evidence of fraud, it is likely that the defendants will opt to settle to avoid the uncertainties and costs of litigation.\",\n    \"monetary\": \"The SEC typically seeks disgorgement of the full amount raised through fraudulent means, which is $2.8 million in this case. A civil penalty is also likely, given the egregious nature of the fraud, and prejudgment interest is commonly applied to disgorgement amounts.\",\n    \"remedial_measures\": \"The SEC is likely to obtain an injunction to prevent future violations, and given the severity of the misconduct, an officer and director bar is probable. Conduct-based restrictions are also likely to prevent Kelly from engaging in similar activities in the future.\"\n  }\n}\n```",
+                                    "comparison": {
+                                                "resolution_type_correct": true,
+                                                "disgorgement_correct": null,
+                                                "penalty_correct": false,
+                                                "interest_correct": null,
+                                                "injunction_correct": true,
+                                                "officer_bar_correct": true,
+                                                "conduct_restriction_correct": true,
+                                                "errors": [
+                                                            "Penalty: predicted $500000.0, actual $125000.0"
+                                                ]
+                                    },
+                                    "metadata": {
+                                                "title": "Tiffany Kelly and Curastory Inc.",
+                                                "release_date": "2025-12-15",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26441.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26441",
+                                                "charges": "Fraud, fraud, Section 17(a), Section 10(b), violating",
+                                                "court": "U.S. District Court for the Eastern District of New York",
+                                                "respondents": "provisions"
+                                    }
+                        },
+                        {
+                                    "case_id": "LR-26440",
+                                    "success": false,
+                                    "error": "Error code: 429 - {'error': {'message': 'Request too large for gpt-4o in organization org-TvVawCqtELDfukHSMcVdXMz1 on tokens per min (TPM): Limit 30000, Requested 43775. The input or output tokens must be reduced in order to run successfully. Visit https://platform.openai.com/account/rate-limits to learn more.', 'type': 'tokens', 'param': None, 'code': 'rate_limit_exceeded'}}",
+                                    "predicted": {},
+                                    "ground_truth": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 35490.0,
+                                                "penalty_amount": null,
+                                                "prejudgment_interest": 35490.0,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": true
+                                    },
+                                    "raw_response": null,
+                                    "metadata": {
+                                                "title": "Kevin L. Jefferson and Demetrius L. Early",
+                                                "release_date": "2025-11-21",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26440-jefferson.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26440",
+                                                "charges": "fraud, Section 5(a), Section 15(a), Section 17(a), Section 10(b), violating",
+                                                "court": "U.S. District Courts for the Northern District of Texas and the Southern District of Texas respectively entered final consent judgments in the SEC\u2019s civil enforcement actions against Texas residents",
+                                                "respondents": "Texas residents, Kevin L"
+                                    }
+                        },
+                        {
+                                    "case_id": "LR-26438",
+                                    "success": false,
+                                    "error": "Error code: 429 - {'error': {'message': 'Request too large for gpt-4o in organization org-TvVawCqtELDfukHSMcVdXMz1 on tokens per min (TPM): Limit 30000, Requested 50778. The input or output tokens must be reduced in order to run successfully. Visit https://platform.openai.com/account/rate-limits to learn more.', 'type': 'tokens', 'param': None, 'code': 'rate_limit_exceeded'}}",
+                                    "predicted": {},
+                                    "ground_truth": {
+                                                "resolution_type": "litigated",
+                                                "disgorgement_amount": 916341.0,
+                                                "penalty_amount": 472902.0,
+                                                "prejudgment_interest": 312460.84,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": false
+                                    },
+                                    "raw_response": null,
+                                    "metadata": {
+                                                "title": "Marshall E. Melton and Integrated Consulting & Management, LLC",
+                                                "release_date": "2025-12-12",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2023/comp25740.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26438",
+                                                "charges": "Fraud, fraud, Section 17(a), Section 10(b), violating",
+                                                "court": "United States District Court for the Middle District of North Carolina",
+                                                "respondents": "Defendants in Fraudulent Securities OfferingOn October 2, 2025, the Securities and Exchange Commission obtained final judgment against Greensboro resident Marshall E"
+                                    }
+                        },
+                        {
+                                    "case_id": "LR-26437",
+                                    "success": true,
+                                    "predicted": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 1150000,
+                                                "penalty_amount": 500000,
+                                                "prejudgment_interest": 100000,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": true,
+                                                "has_conduct_restriction": true,
+                                                "reasoning": {
+                                                            "resolution_type": "Given the detailed allegations and the nature of the violations, it is likely that the defendants will opt to settle to avoid the uncertainties and costs of litigation. The SEC often prefers settlements to ensure swift enforcement and compliance.",
+                                                            "monetary": "The complaint details specific amounts raised and personal gains by Schmidt, suggesting a disgorgement of $1.15 million. A civil penalty is likely given the severity and multiplicity of violations, estimated at $500,000. Prejudgment interest is typically added to disgorgement to account for the time value of money, estimated here at $100,000.",
+                                                            "remedial_measures": "The SEC is likely to seek injunctive relief to prevent future violations, given the pattern of misconduct. An officer/director bar is probable due to Schmidt's central role in the violations. Conduct restrictions, such as a penny stock bar, are also likely given the nature of the securities involved."
+                                                }
+                                    },
+                                    "ground_truth": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 686090.0,
+                                                "penalty_amount": 236451.0,
+                                                "prejudgment_interest": 183528.0,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": true,
+                                                "has_conduct_restriction": true
+                                    },
+                                    "raw_response": "```json\n{\n  \"resolution_type\": \"settled\",\n  \"disgorgement_amount\": 1150000,\n  \"penalty_amount\": 500000,\n  \"prejudgment_interest\": 100000,\n  \"has_injunction\": true,\n  \"has_officer_director_bar\": true,\n  \"has_conduct_restriction\": true,\n  \"reasoning\": {\n    \"resolution_type\": \"Given the detailed allegations and the nature of the violations, it is likely that the defendants will opt to settle to avoid the uncertainties and costs of litigation. The SEC often prefers settlements to ensure swift enforcement and compliance.\",\n    \"monetary\": \"The complaint details specific amounts raised and personal gains by Schmidt, suggesting a disgorgement of $1.15 million. A civil penalty is likely given the severity and multiplicity of violations, estimated at $500,000. Prejudgment interest is typically added to disgorgement to account for the time value of money, estimated here at $100,000.\",\n    \"remedial_measures\": \"The SEC is likely to seek injunctive relief to prevent future violations, given the pattern of misconduct. An officer/director bar is probable due to Schmidt's central role in the violations. Conduct restrictions, such as a penny stock bar, are also likely given the nature of the securities involved.\"\n  }\n}\n```",
+                                    "comparison": {
+                                                "resolution_type_correct": true,
+                                                "disgorgement_correct": false,
+                                                "penalty_correct": false,
+                                                "interest_correct": false,
+                                                "injunction_correct": true,
+                                                "officer_bar_correct": true,
+                                                "conduct_restriction_correct": true,
+                                                "errors": [
+                                                            "Disgorgement: predicted $1150000.0, actual $686090.0",
+                                                            "Penalty: predicted $500000.0, actual $236451.0",
+                                                            "Interest: predicted $100000.0, actual $183528.0"
+                                                ]
+                                    },
+                                    "metadata": {
+                                                "title": "Rapid Therapeutic Science Laboratories, Inc. and Donal R. Schmidt, Jr.",
+                                                "release_date": "2025-12-12",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2023/comp25832.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26437",
+                                                "charges": "Fraud, Section 10(b), Section 13(a), violating, violation",
+                                                "court": "U.S. District Court for the Northern District of Texas entered final judgments as to Dallas-based Rapid Therapeutic Science Laboratories",
+                                                "respondents": "with Making Fraudulent StatementsOn November 24, 2025, the U"
+                                    }
+                        },
+                        {
+                                    "case_id": "LR-26435",
+                                    "success": true,
+                                    "predicted": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 1938580,
+                                                "penalty_amount": 500000,
+                                                "prejudgment_interest": 100000,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": true,
+                                                "reasoning": {
+                                                            "resolution_type": "Given the nature of the violations and the fact that Oppenheimer is a large, established firm, it is likely they will opt to settle to avoid the uncertainties and costs of litigation.",
+                                                            "monetary": "The SEC has clearly identified the ill-gotten gains as $1,938,580, which is likely to be the disgorgement amount. A civil penalty is also likely, given the repeated violations, and prejudgment interest will typically be added to the disgorgement.",
+                                                            "remedial_measures": "An injunction is likely to prevent future violations, and conduct-based restrictions may be imposed to ensure compliance with securities laws. However, an officer/director bar is unlikely as the case does not involve individual misconduct by specific officers or directors."
+                                                }
+                                    },
+                                    "ground_truth": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": null,
+                                                "penalty_amount": null,
+                                                "prejudgment_interest": null,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": false,
+                                                "has_conduct_restriction": false
+                                    },
+                                    "raw_response": "```json\n{\n  \"resolution_type\": \"settled\",\n  \"disgorgement_amount\": 1938580,\n  \"penalty_amount\": 500000,\n  \"prejudgment_interest\": 100000,\n  \"has_injunction\": true,\n  \"has_officer_director_bar\": false,\n  \"has_conduct_restriction\": true,\n  \"reasoning\": {\n    \"resolution_type\": \"Given the nature of the violations and the fact that Oppenheimer is a large, established firm, it is likely they will opt to settle to avoid the uncertainties and costs of litigation.\",\n    \"monetary\": \"The SEC has clearly identified the ill-gotten gains as $1,938,580, which is likely to be the disgorgement amount. A civil penalty is also likely, given the repeated violations, and prejudgment interest will typically be added to the disgorgement.\",\n    \"remedial_measures\": \"An injunction is likely to prevent future violations, and conduct-based restrictions may be imposed to ensure compliance with securities laws. However, an officer/director bar is unlikely as the case does not involve individual misconduct by specific officers or directors.\"\n  }\n}\n```",
+                                    "comparison": {
+                                                "resolution_type_correct": true,
+                                                "disgorgement_correct": null,
+                                                "penalty_correct": null,
+                                                "interest_correct": null,
+                                                "injunction_correct": true,
+                                                "officer_bar_correct": true,
+                                                "conduct_restriction_correct": false,
+                                                "errors": [
+                                                            "Conduct restriction: predicted True, actual False"
+                                                ]
+                                    },
+                                    "metadata": {
+                                                "title": "Oppenheimer & Co., Inc.",
+                                                "release_date": "2025-12-12",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2022/comp-pr2022-161.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26435",
+                                                "charges": "violating",
+                                                "court": "U.S. District Court for the Southern District of New York entered a final consent judgment in the SEC\u2019s\u00a0civil enforcement action against New York-based Oppenheimer & Co. Inc..According to the SEC\u2019s\u00a0complaint",
+                                                "respondents": "New York-based Oppenheimer & Co"
+                                    }
+                        },
+                        {
+                                    "case_id": "LR-26436",
+                                    "success": true,
+                                    "predicted": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": 21300000,
+                                                "penalty_amount": 500000,
+                                                "prejudgment_interest": 2000000,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": true,
+                                                "has_conduct_restriction": true,
+                                                "reasoning": {
+                                                            "resolution_type": "Given the detailed allegations and the clear evidence of fraud, it is likely that the defendant will opt to settle to avoid the uncertainties and costs of litigation.",
+                                                            "monetary": "The complaint details a fraudulent scheme involving $21.3 million, which is likely to be the basis for disgorgement. A civil penalty is also likely given the egregious nature of the fraud, and prejudgment interest is typically applied to disgorgement amounts.",
+                                                            "remedial_measures": "The SEC is seeking injunctive relief, an officer and director bar, and conduct-based restrictions, which are common in cases involving significant fraud and misrepresentation to protect the public and prevent future violations."
+                                                }
+                                    },
+                                    "ground_truth": {
+                                                "resolution_type": "settled",
+                                                "disgorgement_amount": null,
+                                                "penalty_amount": null,
+                                                "prejudgment_interest": null,
+                                                "has_injunction": true,
+                                                "has_officer_director_bar": true,
+                                                "has_conduct_restriction": true
+                                    },
+                                    "raw_response": "```json\n{\n  \"resolution_type\": \"settled\",\n  \"disgorgement_amount\": 21300000,\n  \"penalty_amount\": 500000,\n  \"prejudgment_interest\": 2000000,\n  \"has_injunction\": true,\n  \"has_officer_director_bar\": true,\n  \"has_conduct_restriction\": true,\n  \"reasoning\": {\n    \"resolution_type\": \"Given the detailed allegations and the clear evidence of fraud, it is likely that the defendant will opt to settle to avoid the uncertainties and costs of litigation.\",\n    \"monetary\": \"The complaint details a fraudulent scheme involving $21.3 million, which is likely to be the basis for disgorgement. A civil penalty is also likely given the egregious nature of the fraud, and prejudgment interest is typically applied to disgorgement amounts.\",\n    \"remedial_measures\": \"The SEC is seeking injunctive relief, an officer and director bar, and conduct-based restrictions, which are common in cases involving significant fraud and misrepresentation to protect the public and prevent future violations.\"\n  }\n}\n```",
+                                    "comparison": {
+                                                "resolution_type_correct": true,
+                                                "disgorgement_correct": null,
+                                                "penalty_correct": null,
+                                                "interest_correct": null,
+                                                "injunction_correct": true,
+                                                "officer_bar_correct": true,
+                                                "conduct_restriction_correct": true,
+                                                "errors": []
+                                    },
+                                    "metadata": {
+                                                "title": "Thomas San Miguel",
+                                                "release_date": "2025-12-11",
+                                                "complaint_url": "https://www.sec.gov/files/litigation/complaints/2024/comp26059.pdf",
+                                                "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26436",
+                                                "charges": "Fraud, fraud, Section 10(b), violating",
+                                                "court": "U.S. District Court for the Southern District of Texas entered a final judgment against Thomas San Miguel",
+                                                "respondents": "CEO of Houston-Based Energy Company Charged with FraudOn November 30, 2025, the U"
+                                    }
                         }
-                    },
-                    "ground_truth": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 373885.0,
-                        "penalty_amount": 112165.0,
-                        "prejudgment_interest": 22629.34,
-                        "has_injunction": true,
-                        "has_officer_director_bar": false,
-                        "has_conduct_restriction": true
-                    },
-                    "comparison": {
-                        "resolution_type_correct": true,
-                        "disgorgement_correct": true,
-                        "penalty_correct": false,
-                        "interest_correct": false,
-                        "injunction_correct": true,
-                        "officer_bar_correct": true,
-                        "conduct_restriction_correct": true,
-                        "errors": ["Penalty: predicted $150,000, actual $112,165", "Interest: predicted $20,000, actual $22,629"]
-                    }
-                },
-                {
-                    "case_id": "LR-26444",
-                    "success": true,
-                    "metadata": {
-                        "release_date": "2025-12-16",
-                        "title": "James O Ward, Jr.",
-                        "complaint_url": "https://www.sec.gov/files/litigation/complaints/2024/comp26102.pdf",
-                        "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26444",
-                        "charges": "Fraud, Section 17(a), Section 10(b)"
-                    },
-                    "predicted": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 852000,
-                        "penalty_amount": 200000,
-                        "prejudgment_interest": 50000,
-                        "has_injunction": true,
-                        "has_officer_director_bar": true,
-                        "has_conduct_restriction": true,
-                        "reasoning": {
-                            "resolution_type": "Strong fraud evidence and prior Ponzi involvement suggest settlement.",
-                            "monetary": "Disgorgement of $852,000 raised from investors likely.",
-                            "remedial_measures": "All remedial measures likely due to severity."
-                        }
-                    },
-                    "ground_truth": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": null,
-                        "penalty_amount": 85000.0,
-                        "prejudgment_interest": null,
-                        "has_injunction": true,
-                        "has_officer_director_bar": false,
-                        "has_conduct_restriction": false
-                    },
-                    "comparison": {
-                        "resolution_type_correct": true,
-                        "disgorgement_correct": null,
-                        "penalty_correct": false,
-                        "interest_correct": null,
-                        "injunction_correct": true,
-                        "officer_bar_correct": false,
-                        "conduct_restriction_correct": false,
-                        "errors": ["Penalty: predicted $200,000, actual $85,000", "Officer bar: predicted True, actual False", "Conduct restriction: predicted True, actual False"]
-                    }
-                },
-                {
-                    "case_id": "LR-26443",
-                    "success": true,
-                    "metadata": {
-                        "release_date": "2025-12-15",
-                        "title": "Irfan Mohammed",
-                        "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26443.pdf",
-                        "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26443",
-                        "charges": "Fraud, Section 17(a), Section 10(b)"
-                    },
-                    "predicted": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 385220,
-                        "penalty_amount": 100000,
-                        "prejudgment_interest": 20000,
-                        "has_injunction": true,
-                        "has_officer_director_bar": false,
-                        "has_conduct_restriction": true,
-                        "reasoning": {
-                            "resolution_type": "Clear fraud evidence suggests settlement.",
-                            "monetary": "Disgorgement of $385,220 total benefit received.",
-                            "remedial_measures": "Injunction and conduct restriction likely."
-                        }
-                    },
-                    "ground_truth": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 385220.0,
-                        "penalty_amount": 70000.0,
-                        "prejudgment_interest": 70640.0,
-                        "has_injunction": true,
-                        "has_officer_director_bar": false,
-                        "has_conduct_restriction": true
-                    },
-                    "comparison": {
-                        "resolution_type_correct": true,
-                        "disgorgement_correct": true,
-                        "penalty_correct": false,
-                        "interest_correct": false,
-                        "injunction_correct": true,
-                        "officer_bar_correct": true,
-                        "conduct_restriction_correct": true,
-                        "errors": ["Penalty: predicted $100,000, actual $70,000", "Interest: predicted $20,000, actual $70,640"]
-                    }
-                },
-                {
-                    "case_id": "LR-26442",
-                    "success": true,
-                    "metadata": {
-                        "release_date": "2025-12-15",
-                        "title": "Charles D. Oliver; David P. Ortiz; DaveGlo Investment Group",
-                        "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26442.pdf",
-                        "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26442",
-                        "charges": "Section 15(a) violation"
-                    },
-                    "predicted": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 816934,
-                        "penalty_amount": 500000,
-                        "prejudgment_interest": 50000,
-                        "has_injunction": true,
-                        "has_officer_director_bar": false,
-                        "has_conduct_restriction": true,
-                        "reasoning": {
-                            "resolution_type": "Prior SEC settlement history suggests settlement.",
-                            "monetary": "Disgorgement of $816,934 compensation received.",
-                            "remedial_measures": "Injunction and conduct restriction likely."
-                        }
-                    },
-                    "ground_truth": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": null,
-                        "penalty_amount": null,
-                        "prejudgment_interest": null,
-                        "has_injunction": true,
-                        "has_officer_director_bar": false,
-                        "has_conduct_restriction": false
-                    },
-                    "comparison": {
-                        "resolution_type_correct": true,
-                        "disgorgement_correct": null,
-                        "penalty_correct": null,
-                        "interest_correct": null,
-                        "injunction_correct": true,
-                        "officer_bar_correct": true,
-                        "conduct_restriction_correct": false,
-                        "errors": ["Conduct restriction: predicted True, actual False"]
-                    }
-                },
-                {
-                    "case_id": "LR-26441",
-                    "success": true,
-                    "metadata": {
-                        "release_date": "2025-12-13",
-                        "title": "Tiffany Kelly and Curastory Inc.",
-                        "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26441.pdf",
-                        "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26441",
-                        "charges": "Fraud, Section 17(a), Section 10(b)"
-                    },
-                    "predicted": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 2800000,
-                        "penalty_amount": 500000,
-                        "prejudgment_interest": 100000,
-                        "has_injunction": true,
-                        "has_officer_director_bar": true,
-                        "has_conduct_restriction": true,
-                        "reasoning": {
-                            "resolution_type": "Clear fraud evidence suggests settlement.",
-                            "monetary": "Disgorgement of $2.8M raised fraudulently.",
-                            "remedial_measures": "All remedial measures likely due to severity."
-                        }
-                    },
-                    "ground_truth": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": null,
-                        "penalty_amount": 125000.0,
-                        "prejudgment_interest": null,
-                        "has_injunction": true,
-                        "has_officer_director_bar": true,
-                        "has_conduct_restriction": true
-                    },
-                    "comparison": {
-                        "resolution_type_correct": true,
-                        "disgorgement_correct": null,
-                        "penalty_correct": false,
-                        "interest_correct": null,
-                        "injunction_correct": true,
-                        "officer_bar_correct": true,
-                        "conduct_restriction_correct": true,
-                        "errors": ["Penalty: predicted $500,000, actual $125,000"]
-                    }
-                },
-                {
-                    "case_id": "LR-26437",
-                    "success": true,
-                    "metadata": {
-                        "release_date": "2025-12-12",
-                        "title": "Rapid Therapeutic Science Labs and Donal R. Schmidt, Jr.",
-                        "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26437.pdf",
-                        "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26437",
-                        "charges": "Fraud, Section 10(b), Section 13(a)"
-                    },
-                    "predicted": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 1150000,
-                        "penalty_amount": 500000,
-                        "prejudgment_interest": 100000,
-                        "has_injunction": true,
-                        "has_officer_director_bar": true,
-                        "has_conduct_restriction": true,
-                        "reasoning": {
-                            "resolution_type": "Defendants will likely settle.",
-                            "monetary": "Disgorgement of $1.15M. Penalty ~$500K.",
-                            "remedial_measures": "All remedial measures likely."
-                        }
-                    },
-                    "ground_truth": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 686090.0,
-                        "penalty_amount": 236451.0,
-                        "prejudgment_interest": 183528.0,
-                        "has_injunction": true,
-                        "has_officer_director_bar": true,
-                        "has_conduct_restriction": true
-                    },
-                    "comparison": {
-                        "resolution_type_correct": true,
-                        "disgorgement_correct": false,
-                        "penalty_correct": false,
-                        "interest_correct": false,
-                        "injunction_correct": true,
-                        "officer_bar_correct": true,
-                        "conduct_restriction_correct": true,
-                        "errors": ["Disgorgement: predicted $1,150,000, actual $686,090", "Penalty: predicted $500,000, actual $236,451", "Interest: predicted $100,000, actual $183,528"]
-                    }
-                },
-                {
-                    "case_id": "LR-26435",
-                    "success": true,
-                    "metadata": {
-                        "release_date": "2025-12-11",
-                        "title": "Oppenheimer & Co., Inc.",
-                        "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26435.pdf",
-                        "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26435",
-                        "charges": "Securities violations"
-                    },
-                    "predicted": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 1938580,
-                        "penalty_amount": 500000,
-                        "prejudgment_interest": 100000,
-                        "has_injunction": true,
-                        "has_officer_director_bar": false,
-                        "has_conduct_restriction": true,
-                        "reasoning": {
-                            "resolution_type": "Large firm will settle to avoid uncertainties.",
-                            "monetary": "Disgorgement of $1,938,580 in ill-gotten gains.",
-                            "remedial_measures": "Injunction likely. No officer/director bar."
-                        }
-                    },
-                    "ground_truth": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": null,
-                        "penalty_amount": null,
-                        "prejudgment_interest": null,
-                        "has_injunction": true,
-                        "has_officer_director_bar": false,
-                        "has_conduct_restriction": false
-                    },
-                    "comparison": {
-                        "resolution_type_correct": true,
-                        "disgorgement_correct": null,
-                        "penalty_correct": null,
-                        "interest_correct": null,
-                        "injunction_correct": true,
-                        "officer_bar_correct": true,
-                        "conduct_restriction_correct": false,
-                        "errors": ["Conduct restriction: predicted True, actual False"]
-                    }
-                },
-                {
-                    "case_id": "LR-26436",
-                    "success": true,
-                    "metadata": {
-                        "release_date": "2025-12-11",
-                        "title": "Thomas San Miguel",
-                        "complaint_url": "https://www.sec.gov/files/litigation/complaints/2025/comp26436.pdf",
-                        "case_url": "https://www.sec.gov/enforcement-litigation/litigation-releases/lr-26436",
-                        "charges": "Fraud, Section 10(b)"
-                    },
-                    "predicted": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": 21300000,
-                        "penalty_amount": 500000,
-                        "prejudgment_interest": 2000000,
-                        "has_injunction": true,
-                        "has_officer_director_bar": true,
-                        "has_conduct_restriction": true,
-                        "reasoning": {
-                            "resolution_type": "Clear fraud evidence suggests settlement.",
-                            "monetary": "Fraudulent scheme involved $21.3M.",
-                            "remedial_measures": "All remedial measures sought."
-                        }
-                    },
-                    "ground_truth": {
-                        "resolution_type": "settled",
-                        "disgorgement_amount": null,
-                        "penalty_amount": null,
-                        "prejudgment_interest": null,
-                        "has_injunction": true,
-                        "has_officer_director_bar": true,
-                        "has_conduct_restriction": true
-                    },
-                    "comparison": {
-                        "resolution_type_correct": true,
-                        "disgorgement_correct": null,
-                        "penalty_correct": null,
-                        "interest_correct": null,
-                        "injunction_correct": true,
-                        "officer_bar_correct": true,
-                        "conduct_restriction_correct": true,
-                        "errors": []
-                    }
-                }
             ]
-        };
+};
 
         function getScoreClass(score) {
             if (score >= 70) return 'high';
@@ -907,15 +1100,26 @@
                 const charges = meta.charges || '';
                 const hasErrors = comp.errors && comp.errors.length > 0;
                 
+                // Reducto fields
+                const fraudType = meta.fraud_type || '';
+                const schemeSummary = meta.scheme_summary || '';
+                const caseSynopsis = meta.case_synopsis || '';
+                const defendantProfit = meta.defendant_profit;
+                const extractedCharges = meta.extracted_charges || '';
+                const defendantNames = meta.defendant_names || '';
+                
                 html += `
                     <div class="case-row" id="row-${idx}" onclick="toggleCase(${idx})">
                         <div>
                             <div class="case-title">${title}</div>
-                            <div class="case-charges">${charges}</div>
+                            <div class="case-charges">${schemeSummary || charges}</div>
                             <div class="case-id">${pred.case_id}</div>
                         </div>
                         <div class="case-filed">${formatDate(meta.release_date)}</div>
-                        <div><span class="status-badge ${resolutionType}">${resolutionType}</span></div>
+                        <div>
+                            <span class="status-badge ${resolutionType}">${resolutionType}</span>
+                            ${fraudType ? `<span class="fraud-badge">${fraudType.replace(/_/g, ' ')}</span>` : ''}
+                        </div>
                         <div class="accuracy-cell ${getAccuracyClass(correctFields, totalFields)}">${correctFields}/${totalFields}</div>
                         <div class="source-links">
                             ${meta.complaint_url ? `<a href="${meta.complaint_url}" target="_blank" class="source-link" onclick="event.stopPropagation()">PDF</a>` : ''}
@@ -923,6 +1127,15 @@
                         </div>
                     </div>
                     <div class="case-detail" id="detail-${idx}">
+                        ${caseSynopsis ? `
+                            <div class="synopsis-box">
+                                <h4>📋 Case Synopsis</h4>
+                                <p>${caseSynopsis}</p>
+                                ${defendantProfit ? `<div class="profit-line">💰 Defendant Profit: <strong>$${defendantProfit.toLocaleString()}</strong></div>` : ''}
+                                ${extractedCharges ? `<div class="charges-line">⚖️ Charges: ${extractedCharges}</div>` : ''}
+                            </div>
+                        ` : ''}
+                        
                         <div class="detail-grid">
                             <div class="detail-section predicted">
                                 <h3>🤖 Predicted</h3>

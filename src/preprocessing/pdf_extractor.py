@@ -1,9 +1,24 @@
 """
 PDF Text Extractor for SEC Complaint Documents
 
+DEPRECATED: This module is no longer used in the main pipeline.
+The project now uses Reducto AI for structured extraction.
+See reducto_extractor.py for the current implementation.
+
+This file is kept for reference and fallback purposes only.
+
+---
+
 Extracts text from complaint PDF files linked in SEC case data.
 Skips cases where PDF extraction fails and logs them for transparency.
 """
+
+import warnings
+warnings.warn(
+    "pdf_extractor is deprecated. Use reducto_extractor instead.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 import json
 import os

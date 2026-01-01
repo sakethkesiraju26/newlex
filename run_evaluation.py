@@ -18,12 +18,14 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 
 def build_dataset(args):
-    """Build the evaluation dataset from SEC cases."""
+    """Build the evaluation dataset from SEC cases using Reducto."""
     from preprocessing.dataset_builder import build_evaluation_dataset
     
     print("=" * 60)
     print("Building Evaluation Dataset")
     print("=" * 60)
+    print("Using Reducto AI for structured extraction...")
+    print("Note: This uses Reducto credits (~4 credits/page)\n")
     
     result = build_evaluation_dataset(
         input_file=args.input,
@@ -172,16 +174,16 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Build dataset from SEC cases (extracts PDFs, ground truth)
-  python run_evaluation.py --build-dataset --max-cases 100
+  # Build dataset from SEC cases (uses Reducto for structured extraction)
+  python run_evaluation.py --build-dataset --max-cases 8
 
   # Run evaluation with mock provider (for testing)
   python run_evaluation.py --evaluate --provider mock
 
-  # Run evaluation with OpenAI on all cases
-  python run_evaluation.py --evaluate --provider openai --model gpt-4
+  # Run evaluation with OpenAI GPT-4o
+  python run_evaluation.py --evaluate --provider openai --model gpt-4o --save-results
 
-  # Run evaluation with Anthropic
+  # Run evaluation with Anthropic Claude
   python run_evaluation.py --evaluate --provider anthropic --model claude-3-opus-20240229
 
   # Show a sample case and prompt

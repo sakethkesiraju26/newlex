@@ -1,0 +1,34 @@
+{
+  "job_id": "ef66a812-b5fd-4707-b49f-e472c7ebcf5c",
+  "usage": {
+    "num_pages": 17,
+    "num_fields": 21,
+    "credits": 68
+  },
+  "result": [
+    {
+      "case_synopsis": "The SEC has filed a complaint against Artur Khachatryan, accusing him of engaging in a manipulative stock trading scheme known as spoofing between January 2022 and January 2024. Khachatryan allegedly placed non-bona fide orders to manipulate stock prices and executed bona fide orders at the manipulated prices for profit. He conducted this scheme in his own accounts and those of friends and relatives, generating approximately $373,885 in ill-gotten gains. The scheme primarily took place outside regular market hours, exploiting thinly traded securities to artificially move prices. Khachatryan also opened accounts in the names of others to continue trading after his accounts were restricted or closed by broker-dealers. The SEC claims that Khachatryan was aware of the illegality of his actions, as evidenced by his communications with broker-dealers acknowledging the manipulative nature of his trading practices.\n\nThe SEC is seeking a permanent injunction against Khachatryan, disgorgement of his ill-gotten gains with prejudgment interest, and a civil penalty. Additionally, the SEC requests a conduct-based injunction prohibiting Khachatryan from opening or trading in brokerage accounts in his name or the names of others without notifying the broker-dealer of the judgment against him.",
+      "defendant_names": "Artur Khachatryan",
+      "defendant_type": "individual",
+      "is_repeat_offender": false,
+      "charges": "Section 10(b) of the Exchange Act; Rule 10b-5(a) and (c); Rule 10b-5(b); Section 9(a)(2) of the Exchange Act; Sections 17(a)(1) and 17(a)(3) of the Securities Act; Section 17(a)(2) of the Securities Act",
+      "fraud_type": "market_manipulation",
+      "scheme_summary": "Artur Khachatryan engaged in a spoofing scheme to manipulate stock prices and profit from the resulting artificial price movements.",
+      "victim_count": null,
+      "amount_raised": null,
+      "defendant_profit": 373885,
+      "violation_start_date": "2022-01-01",
+      "violation_end_date": "2024-01-31",
+      "seeks_disgorgement": true,
+      "seeks_penalty": true,
+      "seeks_injunction": true,
+      "seeks_officer_bar": false,
+      "seeks_penny_stock_bar": false,
+      "seeks_industry_bar": false,
+      "other_relief": "prohibition from opening or trading in brokerage accounts without notifying broker-dealer of judgment",
+      "court": "United States District Court Central District of California",
+      "filing_date": "2025-12-16"
+    }
+  ]
+}
+

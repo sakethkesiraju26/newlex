@@ -1,8 +1,8 @@
 """
 Dataset Builder for SEC Case LLM Evaluation
 
-Combines PDF extraction and ground truth extraction to create
-a clean evaluation dataset for LLM prediction.
+Uses Reducto AI for structured extraction from complaint PDFs,
+combined with ground truth extraction for evaluation scoring.
 """
 
 import json
@@ -11,8 +11,18 @@ from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass, asdict
 from datetime import datetime
 
-from .pdf_extractor import PDFExtractor, get_complaint_url
+from .reducto_extractor import ReductoExtractor
 from .ground_truth_extractor import GroundTruthExtractor
+
+
+def get_complaint_url(case: Dict) -> Optional[str]:
+    """Extract complaint PDF URL from case data."""
+    docs = case.get('supportingDocuments', [])
+    for doc in docs:
+        doc_type = doc.get('type', '').lower()
+        if 'complaint' in doc_type:
+            return doc.get('url')
+    return None
 
 
 @dataclass
@@ -20,8 +30,9 @@ class ProcessedCase:
     """A fully processed case ready for LLM evaluation."""
     case_id: str
     metadata: Dict[str, Any]
-    complaint_text: str  # From PDF - what LLM sees
+    complaint_text: str  # Reducto case_synopsis - what LLM sees
     ground_truth: Dict[str, Any]  # From fullText - for comparison only
+    reducto_extraction: Optional[Dict[str, Any]] = None  # Full Reducto structured data
     
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -41,21 +52,24 @@ class SkippedCase:
 
 class DatasetBuilder:
     """
-    Builds evaluation dataset by:
-    1. Extracting complaint text from PDFs
-    2. Extracting ground truth from fullText
-    3. Splitting into:
+    Builds evaluation dataset using Reducto AI for PDF extraction.
+    
+    Pipeline:
+    1. Extract structured data from complaint PDFs via Reducto
+    2. Extract ground truth outcomes from fullText
+    3. Split into:
        - evaluation_dataset.json (resolved: settled + litigated)
        - prediction_dataset.json (ongoing: no resolution yet)
     """
     
-    def __init__(self, pdf_timeout: int = 60):
-        self.pdf_extractor = PDFExtractor(timeout=pdf_timeout)
+    def __init__(self):
+        """Initialize the dataset builder with Reducto extractor."""
+        self.reducto_extractor = ReductoExtractor()
         self.ground_truth_extractor = GroundTruthExtractor()
         
     def process_case(self, case: Dict) -> Tuple[Optional[ProcessedCase], Optional[SkippedCase]]:
         """
-        Process a single case.
+        Process a single case using Reducto for structured extraction.
         
         Args:
             case: Raw case dictionary from sec-cases.json
@@ -77,33 +91,35 @@ class DatasetBuilder:
                 url=None
             )
         
-        # Step 2: Extract PDF text
-        result = self.pdf_extractor.extract_from_url(complaint_url)
+        # Step 2: Extract via Reducto
+        result = self.reducto_extractor.extract_from_url(complaint_url)
         
-        if not result.success:
+        if not result["success"]:
             return None, SkippedCase(
                 case_id=case_id,
                 title=title,
-                reason=f'PDF extraction failed: {result.error}',
+                reason=f'Reducto extraction failed: {result.get("error", "Unknown error")}',
                 url=complaint_url
             )
         
-        # Step 3: Clean and validate text
-        complaint_text = self.pdf_extractor.clean_text(result.text)
+        reducto_data = result["data"].to_dict()
         
-        if len(complaint_text) < 500:  # Minimum text length check
+        # Step 3: Use case_synopsis as the "complaint_text" for LLM input
+        complaint_text = reducto_data.get("case_synopsis", "")
+        
+        if not complaint_text or len(complaint_text) < 100:
             return None, SkippedCase(
                 case_id=case_id,
                 title=title,
-                reason=f'Extracted text too short ({len(complaint_text)} chars) - likely failed extraction',
+                reason='Reducto synopsis too short or empty',
                 url=complaint_url
             )
         
-        # Step 4: Extract ground truth from fullText
+        # Step 4: Extract ground truth from fullText (for evaluation scoring)
         full_text = case.get('features', {}).get('fullText', '')
         ground_truth = self.ground_truth_extractor.extract(full_text)
         
-        # Step 5: Build processed case
+        # Step 5: Build processed case with Reducto data
         processed = ProcessedCase(
             case_id=case_id,
             metadata={
@@ -111,12 +127,17 @@ class DatasetBuilder:
                 'title': title,
                 'complaint_url': complaint_url,
                 'case_url': case.get('url', ''),
-                'court': case.get('features', {}).get('court', ''),
+                'court': reducto_data.get('court') or case.get('features', {}).get('court', ''),
                 'respondents': case.get('features', {}).get('respondents', []),
-                'charges': case.get('features', {}).get('charges', [])
+                'charges': reducto_data.get('charges') or case.get('features', {}).get('charges', []),
+                'fraud_type': reducto_data.get('fraud_type'),
+                'scheme_summary': reducto_data.get('scheme_summary'),
+                'defendant_names': reducto_data.get('defendant_names'),
+                'reducto_usage': result.get('usage', {})
             },
             complaint_text=complaint_text,
-            ground_truth=ground_truth.to_dict()
+            ground_truth=ground_truth.to_dict(),
+            reducto_extraction=reducto_data
         )
         
         return processed, None
@@ -153,22 +174,30 @@ class DatasetBuilder:
         
         total = len(cases)
         if verbose:
-            print(f"Processing {total} cases...")
+            print(f"Processing {total} cases using Reducto...")
         
         # Process all cases
         processed_cases: List[ProcessedCase] = []
         skipped_cases: List[SkippedCase] = []
+        total_credits = 0
         
         for i, case in enumerate(cases):
-            if verbose and (i + 1) % 10 == 0:
-                print(f"  Progress: {i + 1}/{total} ({len(processed_cases)} successful, {len(skipped_cases)} skipped)")
+            if verbose:
+                print(f"  [{i + 1}/{total}] Processing {case.get('releaseNumber', 'unknown')}...")
             
             processed, skipped = self.process_case(case)
             
             if processed:
                 processed_cases.append(processed)
+                # Track Reducto credits
+                usage = processed.metadata.get('reducto_usage', {})
+                total_credits += usage.get('credits', 0)
+                if verbose:
+                    print(f"    ✓ Success ({usage.get('credits', 0)} credits)")
             if skipped:
                 skipped_cases.append(skipped)
+                if verbose:
+                    print(f"    ✗ Skipped: {skipped.reason}")
         
         # Split into resolved (for evaluation) and ongoing (for prediction)
         resolved_cases = [c for c in processed_cases 
@@ -182,6 +211,7 @@ class DatasetBuilder:
             print(f"    - Resolved (for evaluation): {len(resolved_cases)}")
             print(f"    - Ongoing (for prediction): {len(ongoing_cases)}")
             print(f"  Skipped: {len(skipped_cases)}")
+            print(f"  Total Reducto credits used: {total_credits}")
         
         # Calculate statistics for resolved cases
         stats = self._calculate_stats(resolved_cases)
@@ -193,10 +223,12 @@ class DatasetBuilder:
         evaluation_dataset = {
             'metadata': {
                 'created_at': datetime.now().isoformat(),
+                'extraction_method': 'reducto',
                 'total_processed': total,
                 'resolved_count': len(resolved_cases),
                 'ongoing_count': len(ongoing_cases),
                 'skipped': len(skipped_cases),
+                'total_credits_used': total_credits,
                 'description': 'Resolved cases only (settled/litigated) for LLM evaluation'
             },
             'statistics': stats,
@@ -210,6 +242,7 @@ class DatasetBuilder:
         prediction_dataset = {
             'metadata': {
                 'created_at': datetime.now().isoformat(),
+                'extraction_method': 'reducto',
                 'count': len(ongoing_cases),
                 'description': 'Ongoing cases for LLM prediction (no scoring - outcomes unknown)'
             },
@@ -242,6 +275,7 @@ class DatasetBuilder:
             'resolved': len(resolved_cases),
             'ongoing': len(ongoing_cases),
             'skipped': len(skipped_cases),
+            'total_credits': total_credits,
             'statistics': stats
         }
     
@@ -323,7 +357,7 @@ def build_evaluation_dataset(
     verbose: bool = True
 ) -> Dict[str, Any]:
     """
-    Convenience function to build the evaluation dataset.
+    Convenience function to build the evaluation dataset using Reducto.
     
     Args:
         input_file: Path to sec-cases.json
@@ -346,12 +380,15 @@ def build_evaluation_dataset(
 if __name__ == '__main__':
     import argparse
     
-    parser = argparse.ArgumentParser(description='Build SEC case evaluation dataset')
+    parser = argparse.ArgumentParser(description='Build SEC case evaluation dataset using Reducto')
     parser.add_argument('--input', '-i', default='sec-cases.json', help='Input JSON file')
     parser.add_argument('--output', '-o', default='data/processed', help='Output directory')
     parser.add_argument('--max', '-m', type=int, default=None, help='Max cases to process')
     
     args = parser.parse_args()
+    
+    print("Using Reducto AI for structured extraction...")
+    print("Note: This uses Reducto credits (~4 credits/page)\n")
     
     result = build_evaluation_dataset(
         input_file=args.input,

@@ -5,6 +5,7 @@ Generate HTML viewer with embedded results data.
 
 import json
 import os
+import re
 import webbrowser
 
 def generate_viewer(results_file='data/processed/evaluation_results_openai.json', 
@@ -49,9 +50,53 @@ def generate_viewer(results_file='data/processed/evaluation_results_openai.json'
     return output_file
 
 
+def update_cases_html(results_file='data/processed/evaluation_results_openai.json',
+                      cases_html='cases.html'):
+    """Update cases.html with latest evaluation results."""
+    
+    # Load results
+    with open(results_file, 'r') as f:
+        results = json.load(f)
+    
+    # Load current cases.html
+    with open(cases_html, 'r') as f:
+        html = f.read()
+    
+    # Create new results JSON
+    results_json = json.dumps(results, indent=12)
+    
+    # Find and replace the embedded data
+    # Pattern matches: const resultsData = { ... };
+    pattern = r'const resultsData = \{[\s\S]*?\};'
+    match = re.search(pattern, html)
+    
+    if match:
+        # Replace the matched section with new data
+        new_data = f'const resultsData = {results_json};'
+        new_html = html[:match.start()] + new_data + html[match.end():]
+        
+        # Write updated file
+        with open(cases_html, 'w') as f:
+            f.write(new_html)
+        
+        print(f"Updated {cases_html} with {len(results.get('predictions', []))} cases")
+    else:
+        print(f"Warning: Could not find resultsData in {cases_html}")
+    
+    return cases_html
+
+
 if __name__ == '__main__':
+    # Generate the results viewer
     output = generate_viewer()
     abs_path = os.path.abspath(output)
-    print(f"\nOpening in browser: file://{abs_path}")
-    webbrowser.open(f'file://{abs_path}')
+    print(f"\nGenerated: file://{abs_path}")
+    
+    # Also update cases.html
+    update_cases_html()
+    
+    # Open in browser
+    cases_path = os.path.abspath('cases.html')
+    print(f"Opening cases.html in browser: file://{cases_path}")
+    webbrowser.open(f'file://{cases_path}')
 
