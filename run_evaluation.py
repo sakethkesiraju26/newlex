@@ -63,10 +63,12 @@ def run_llm_evaluation(args):
     
     cases = data.get('cases', [])
     
-    if args.max_eval_cases:
-        cases = cases[:args.max_eval_cases]
+    # Apply skip and limit
+    start_idx = args.skip_cases if hasattr(args, 'skip_cases') else 0
+    end_idx = start_idx + args.max_eval_cases if args.max_eval_cases else len(cases)
+    cases = cases[start_idx:end_idx]
     
-    print(f"Loaded {len(cases)} cases for evaluation")
+    print(f"Loaded {len(cases)} cases for evaluation (skipping first {start_idx})")
     
     # Select provider
     if args.provider == 'mock':
@@ -115,9 +117,39 @@ def run_llm_evaluation(args):
     # Save results
     if args.save_results:
         results_file = os.path.join(args.output_dir, f'evaluation_results_{args.provider}.json')
-        with open(results_file, 'w') as f:
-            json.dump(result.to_dict(), f, indent=2, default=str)
-        print(f"\nResults saved to: {results_file}")
+        
+        # Handle append mode
+        if args.append_results and os.path.exists(results_file):
+            with open(results_file, 'r') as f:
+                existing = json.load(f)
+            
+            # Append new predictions
+            existing_predictions = existing.get('predictions', [])
+            new_predictions = result.to_dict().get('predictions', [])
+            existing_predictions.extend(new_predictions)
+            existing['predictions'] = existing_predictions
+            
+            # Recalculate scores with merged data
+            from evaluation.scoring import calculate_score
+            all_cases = []
+            for p in existing_predictions:
+                if p.get('success'):
+                    all_cases.append({
+                        'predicted': p['predicted'],
+                        'ground_truth': p['ground_truth']
+                    })
+            new_score = calculate_score(all_cases, result.model_name)
+            existing['score'] = new_score.to_dict()
+            existing['scorable_counts'] = existing['score'].get('scorable_counts', {})
+            existing['scorable_counts']['total_cases'] = len(existing_predictions)
+            
+            with open(results_file, 'w') as f:
+                json.dump(existing, f, indent=2, default=str)
+            print(f"\nResults appended to: {results_file} (total: {len(existing_predictions)} cases)")
+        else:
+            with open(results_file, 'w') as f:
+                json.dump(result.to_dict(), f, indent=2, default=str)
+            print(f"\nResults saved to: {results_file}")
     
     return result
 
@@ -216,6 +248,10 @@ Examples:
                         help='API key (or set OPENAI_API_KEY / ANTHROPIC_API_KEY env var)')
     parser.add_argument('--max-eval-cases', type=int, default=None,
                         help='Maximum cases to evaluate (default: all)')
+    parser.add_argument('--skip-cases', type=int, default=0,
+                        help='Number of cases to skip (for batch continuation)')
+    parser.add_argument('--append-results', action='store_true',
+                        help='Append to existing results file instead of overwriting')
     parser.add_argument('--short-prompt', action='store_true',
                         help='Use shorter prompt format')
     parser.add_argument('--max-text-length', type=int, default=None,
