@@ -1032,11 +1032,9 @@
 
     <main class="container">
         <div class="page-header">
-            <h1>Live Matter Set</h1>
-            <p>Real SEC enforcement matters used to generate forecasting questions.</p>
+            <h1>Model Evaluation</h1>
+            <p>Compare AI model performance on real SEC enforcement case predictions.</p>
         </div>
-
-        <div class="stats-row" id="stats-row"></div>
 
         <!-- Model Comparison Section -->
         <div class="model-comparison" id="model-comparison">
@@ -1079,7 +1077,7 @@
                     <div class="model-label">Coming Soon</div>
                 </div>
             </div>
-            <p class="comparison-note">Click a model to view its predictions below. Currently showing <strong id="active-model-name">GPT-4o</strong> results.</p>
+            <p class="comparison-note">Showing <strong id="active-model-name">GPT-4o</strong> predictions on <strong id="case-count">500</strong> evaluated cases below.</p>
         </div>
 
         <div class="search-box">
@@ -26841,44 +26839,6 @@
             return fraudType.replace(/_/g, ' ');
         }
 
-        function renderStats() {
-            const container = document.getElementById('stats-row');
-            const predictions = resultsData.predictions;
-            const successful = predictions.filter(p => p.success).length;
-            const settled = predictions.filter(p => p.ground_truth?.resolution_type === 'settled').length;
-            const litigated = predictions.filter(p => p.ground_truth?.resolution_type === 'litigated').length;
-            
-            // Get scores from results
-            const score = resultsData.score || {};
-            const overallScore = score.overall_score || 0;
-            const individualScores = score.individual_scores || {};
-            
-            container.innerHTML = `
-                <div class="stats-summary">
-                    <div class="stat-card primary">
-                        <div class="stat-value">${overallScore.toFixed(1)}%</div>
-                        <div class="stat-label">GPT-4o Accuracy</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${successful}</div>
-                        <div class="stat-label">Cases Evaluated</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${(individualScores.has_injunction || 0).toFixed(0)}%</div>
-                        <div class="stat-label">Injunction Acc</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${(individualScores.has_officer_director_bar || 0).toFixed(0)}%</div>
-                        <div class="stat-label">Officer Bar Acc</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${(individualScores.monetary_average || 0).toFixed(0)}%</div>
-                        <div class="stat-label">Monetary Acc</div>
-                    </div>
-                </div>
-            `;
-        }
-
         function renderCases(searchQuery = '') {
             const container = document.getElementById('cases-container');
             let predictions = resultsData.predictions.filter(p => p.success);
@@ -27087,11 +27047,17 @@
 
         // Model selection
         let activeModel = 'gpt';
+        const modelData = {
+            gpt: { name: 'GPT-4o', cases: 500, available: true },
+            claude: { name: 'Claude 3.5 Haiku', cases: 50, available: false },
+            gemini: { name: 'Gemini 2.0', cases: 0, available: false }
+        };
         
         function selectModel(model) {
             if (model === 'gemini') return; // Disabled
             
             activeModel = model;
+            const data = modelData[model];
             
             // Update card states
             document.querySelectorAll('.model-card').forEach(card => {
@@ -27099,15 +27065,21 @@
             });
             document.querySelector(`.model-card.${model}`).classList.add('active');
             
-            // Update label
-            const modelNames = { gpt: 'GPT-4o', claude: 'Claude 3.5 Haiku', gemini: 'Gemini 2.0' };
-            document.getElementById('active-model-name').textContent = modelNames[model];
+            // Update labels
+            document.getElementById('active-model-name').textContent = data.name;
+            document.getElementById('case-count').textContent = data.cases;
             
-            // Re-render cases (for future: load different model's results)
+            // Show note if Claude selected (data not yet loaded in page)
+            if (model === 'claude') {
+                alert('Claude predictions are evaluated but not yet integrated into case view. Showing GPT-4o predictions for now.');
+                selectModel('gpt');
+                return;
+            }
+            
+            // Re-render cases
             renderCases(document.getElementById('search-input').value);
         }
         
-        renderStats();
         renderCases();
         
         // Search functionality
